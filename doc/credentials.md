@@ -1,3 +1,0 @@
-# credentials
-unique username
-password

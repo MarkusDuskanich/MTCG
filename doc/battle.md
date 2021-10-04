@@ -1,5 +1,5 @@
 # Battle
-request to server to compete against another user with defined [[deck]]
+request to server to compete against another [[user]] with defined [[deck]]
 
 consists of [[rounds]]
 max of 100 [[rounds]]

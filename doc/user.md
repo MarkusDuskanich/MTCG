@@ -1,9 +1,6 @@
 # User
-has [[credentials]]
-has [[stack]]
-has [[deck]]
-has [[ELO]]
-has [[token]]
+has [[data]]
+has [[stack]] of [[cards]] some of which are part of [[deck]]
 has 20 coins from start
 
 can [[register]] or [[login]]
@@ -12,8 +9,8 @@ can [[logout]]
 can [[buy cards]]
 can [[trade]]
 
-can manage his [[deck]]
-can edit [[credentials]]
+can [[manage]] his [[deck]]
+can edit parts of [[data]]
 
 can check the [[scoreboard]]
 can do [[battle]]
