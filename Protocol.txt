@@ -1,4 +1,5 @@
 to document features the application "obsidian" has been used
 
 time spend:
-3.10.2021: 09:00 - 12:00 documentation of basic features, settup of repository (3 hours)
+3.10.2021 09:00 - 12:00 documentation of basic features, setup of repository (3h)
+4.10.2021 14:00 - 16:00 finsihed feature documentation, created unit test project, first class (2h)
