@@ -1,9 +1,9 @@
 # Daily login bonus
-once a day give [[user]] reward no reward for [[registration]]
+once a day give [[user]] reward, no reward for [[registration]]
 
 after 4 days streak resets
 
-store last login date in DB,
+store last [[login]] date in DB,
 upon login check stored date,
 if yesterday give bonus, update date, update streak counter
 
