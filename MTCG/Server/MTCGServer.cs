@@ -10,15 +10,15 @@ using System.Threading.Tasks;
 
 namespace MTCG.Server {
     public class MTCGServer {
-        protected int port;
+        protected readonly int _port;
         TcpListener listener;
 
         public MTCGServer(int port) {
-            this.port = port;
+            _port = port;
         }
 
         public void Run() {
-            listener = new TcpListener(IPAddress.Loopback, port);
+            listener = new TcpListener(IPAddress.Loopback, _port);
             listener.Start(5);
             while (true) {
                 new ConnectionHandler(listener.AcceptTcpClient()); 

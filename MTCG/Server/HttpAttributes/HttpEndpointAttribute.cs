@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 namespace MTCG.Server.HttpAttributes {
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct)]
     public class HttpEndpointAttribute : Attribute {
-        private string _path;
+        public string Path { get; private set; }
 
         public HttpEndpointAttribute(string path) {
-            _path = path;
+            Path = path;
         }
     }
 }

@@ -7,7 +7,8 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace MTCG.Server {
-    class HttpRequestProcessor {
+
+    class HttpRequest {
         private readonly StreamReader _reader;
 
         public string Method { get; private set; } = null;
@@ -17,39 +18,41 @@ namespace MTCG.Server {
 
         public Dictionary<string, string> Headers { get; } = new();
 
-        public HttpRequestProcessor(TcpClient s) {
-            _reader = new(s.GetStream());
+        public HttpRequest(TcpClient client) {
+            _reader = new(client.GetStream());
+            //Error handling is missing if some of the values are not set after parse
+            Parse();
         }
 
-        public void Process() {
+        private void Parse() {
             while (!_reader.EndOfStream) {
-                string line = _reader.ReadLine();
+                var line = _reader.ReadLine();
 
                 if (ContentIsNext(line)) {
-                    ProcessContent();
+                    ParseContent();
                     return;
                 }
 
-                if (MethodNotProcessed())
-                    ProcessMethod(line);
+                if (FirstLineNotProcessed())
+                    ParseMethodPathVersion(line);
                 else
-                    ProcessHeaders(line);
+                    ParseHeaders(line);
             }
         }
 
-        private void ProcessHeaders(string line) {
+        private void ParseHeaders(string line) {
             var parts = line.Split(": ");
             Headers.Add(parts[0], parts[1]);
         }
 
-        private void ProcessMethod(string line) {
+        private void ParseMethodPathVersion(string line) {
             var parts = line.Split(' ');
             Method = parts[0];
             Path = parts[1];
             Version = parts[2];
         }
 
-        private bool MethodNotProcessed() {
+        private bool FirstLineNotProcessed() {
             return Method == null;
         }
 
@@ -57,14 +60,14 @@ namespace MTCG.Server {
             return line.Length == 0;
         }
 
-        private void ProcessContent() {
-            if (Headers.ContainsKey("Content-Length")) {
-                int contentlength = int.Parse(Headers["Content-Length"]);
-                char[] buffer = new char[contentlength];
-                _reader.ReadBlock(buffer, 0, contentlength);
-                Content = buffer.ToString();
-            }
-            //error handling if no content??
+        private void ParseContent() {
+            if (!Headers.ContainsKey("Content-Length"))
+                throw new KeyNotFoundException("Headers do not contain Content-Length");
+
+            var buffer = new char[int.Parse(Headers["Content-Length"])];
+            if (_reader.ReadBlock(buffer, 0, buffer.Length) != buffer.Length)
+                throw new Exception("Could not read full content");
+            Content = buffer.ToString();
         }
     }
 }
