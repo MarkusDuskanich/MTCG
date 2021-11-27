@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace MTCG.Server.HttpAttributes {
-    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct)]
+namespace MTCG.Http.Attributes {
+    [AttributeUsage(AttributeTargets.Class)]
     public class HttpEndpointAttribute : Attribute {
         public string Path { get; private set; }
+        public const string PathParameter = "{pathParam}";
 
         public HttpEndpointAttribute(string path) {
             Path = path;

@@ -1,14 +1,19 @@
-﻿using System;
+﻿using MTCG.Client;
+using MTCG.Http.Method;
+using MTCG.Server;
+using System;
+using System.Threading;
 
-namespace MTCG.Server {
+namespace MTCG {
     class Program {
         static void Main() {
             Console.CancelKeyPress += (sender, e) => Environment.Exit(0);
 
-            Console.WriteLine("MTCG Server is running...");
-
-            new MTCGServer(10001).Run();
+            HttpServer.Instance.Start();
+            //new Thread(() => new HttpClient().MakeRequest(HttpMethod.POST, "/users", @"{""user"": ""1""}")).Start();
+            //new Thread(() => new HttpClient().MakeRequest(HttpMethod.POST, "/users", @"{""user"": ""2""}")).Start();
+            //new Thread(() => new HttpClient().MakeRequest(HttpMethod.POST, "/users", @"{""user"": ""3""}")).Start();
+            //new Thread(() => new HttpClient().MakeRequest(HttpMethod.POST, "/users", @"{""user"": ""4""}")).Start();
         }
-
     }
 }
