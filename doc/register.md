@@ -1,3 +1,3 @@
 # Register
-if successful provide [[token]]
-return [[user]] instance
+
+with username and password

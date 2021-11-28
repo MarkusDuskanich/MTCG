@@ -1,3 +1,3 @@
 # Login
 provide [[token]] to client
-return [[user]] instance
+with username and password

@@ -1,8 +1,11 @@
 # Name
 
+from name, [[element]]  and type can be deduced
+
+structure: [[element]](spell|[[archetypes]]) there is no element in name if element is normal
+
 ### [[spell card]]
 spell
 
 ### [[monster card]]
-
-goblin, dragon, wizard, ork, knight, kraken, elve
+further classified into [[archetypes]]
