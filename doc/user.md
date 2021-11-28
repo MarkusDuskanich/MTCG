@@ -4,7 +4,6 @@ has [[stack]] of [[cards]] some of which are part of [[deck]]
 has 20 coins from start
 
 can [[register]] or [[login]]
-can [[logout]]
 
 can [[buy cards]]
 can [[trade]]

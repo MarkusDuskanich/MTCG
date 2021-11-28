@@ -5,7 +5,13 @@ VisualStudioVersion = 16.0.31624.102
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MTCG", "Server\MTCG.csproj", "{DF8CE952-49BC-4B32-98B8-9E48091B2921}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MTCG.Test", "MTCG.Test\MTCG.Test.csproj", "{951F4A48-B3DC-4569-8EA4-7D2CDF333A3D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MTCG.Test", "MTCG.Test\MTCG.Test.csproj", "{951F4A48-B3DC-4569-8EA4-7D2CDF333A3D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionFiles", "SolutionFiles", "{6990E1A0-6478-4ED8-B49B-1F81A0C749DC}"
+	ProjectSection(SolutionItems) = preProject
+		..\mtcgdb.sql = ..\mtcgdb.sql
+		..\Protocol.md = ..\Protocol.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
