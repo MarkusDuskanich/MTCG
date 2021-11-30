@@ -10,18 +10,15 @@ namespace MTCG.Client {
 
         public HttpClient(int port = 10001) {
             while (!HttpServer.Instance.IsRunning) {
-                Thread.Sleep(1);
+                Thread.Sleep(10);
             }
             _port = port;
         }
 
         public HttpResponse MakeRequest(HttpMethod method, string path, string content = "", params string[] headers) {
-            TcpClient client = new("localhost", _port);
+            using TcpClient client = new("localhost", _port);
             new HttpRequest(client).Send(method, path, content, headers);
-            var res = new HttpResponse(client).Receive();
-            client.GetStream().Close();
-            client.Close();
-            return res;
+            return new HttpResponse(client).Receive();
         }
     }
 }

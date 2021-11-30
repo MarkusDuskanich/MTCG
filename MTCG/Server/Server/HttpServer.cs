@@ -30,7 +30,7 @@ namespace MTCG.Server {
 
         public void Stop() {
             while (!IsRunning && t_server?.ThreadState == ThreadState.Running) {
-                Thread.Sleep(1);
+                Thread.Sleep(10);
             }
 
             if (!IsRunning)
@@ -51,7 +51,6 @@ namespace MTCG.Server {
                 } catch (SocketException) {
                     Console.WriteLine($"{Name} stopped");
                 }
-                Thread.Sleep(1);
             }
         }
     }

@@ -34,7 +34,7 @@ namespace MTCG.Http.Status {
                 if (From((HttpStatus)status) == description)
                     return (HttpStatus)status;
             }
-            throw new ArgumentException($"{description} HTTP status code not found");
+            throw new ArgumentException($"HTTP status code for <{description}> not found");
         }
     }
 }

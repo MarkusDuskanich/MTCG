@@ -1,7 +1,5 @@
-using MTCG.Client;
 using MTCG.Http.Method;
 using MTCG.Http.Status;
-using MTCG.Server;
 using NUnit.Framework;
 
 namespace MTCG.Test {
@@ -9,9 +7,15 @@ namespace MTCG.Test {
     public class TestEndpoints {   
 
         [Test]
-        public void TestUsersEndpointPost() {
-            var response = TestSetup.Client.MakeRequest(HttpMethod.POST, "/users");
+        public void TestEndpointPostReturnsOk() {
+            var response = TestSetup.Client.MakeRequest(HttpMethod.GET, "/test");
             Assert.AreEqual(HttpStatus.OK, response.Status);
+        }
+
+        [Test]
+        public void NonExistingEndpointReturns404() {
+            var response = TestSetup.Client.MakeRequest(HttpMethod.GET, "/nonexistingendpoint");
+            Assert.AreEqual(HttpStatus.NotFound, response.Status);
         }
     }
 }

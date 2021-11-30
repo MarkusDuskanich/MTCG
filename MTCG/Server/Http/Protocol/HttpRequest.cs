@@ -12,9 +12,9 @@ namespace MTCG.Http.Protocol {
         public HttpMethod Method { get; set; }
         public string Path { get; set; } = null;
         public string Content { get; set; } = "";
+        public List<string> PathParameters { get; set; }
         public Dictionary<string, string> QueryParameters { get; private set; } = new();
         public Dictionary<string, string> Headers { get; private set; } = new();
-        public List<string> PathParameters { get; set; }
 
         public HttpRequest(TcpClient client) {
             _client = client;
@@ -102,14 +102,18 @@ namespace MTCG.Http.Protocol {
         }
 
         private void ParseContent(StreamReader reader) {
-            if (!Headers.ContainsKey("Content-Length"))
-                throw new KeyNotFoundException("Headers do not contain Content-Length");
+            try {
+                if (!Headers.ContainsKey("Content-Length"))
+                    throw new KeyNotFoundException("Headers do not contain Content-Length");
 
-            var buffer = new char[int.Parse(Headers["Content-Length"])];
-            if (reader.ReadBlock(buffer, 0, buffer.Length) != buffer.Length)
-                throw new Exception("Could not read full content");
+                var buffer = new char[int.Parse(Headers["Content-Length"])];
+                if (reader.ReadBlock(buffer, 0, buffer.Length) != buffer.Length)
+                    throw new Exception("Could not read full content");
 
-            Content = new string(buffer);
+                Content = new string(buffer);
+            } catch (Exception) {
+                Content = "";
+            }
         }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Sockets;
 using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
 using MTCG.Http.Attributes;
 using MTCG.Http.Protocol;
@@ -23,7 +24,6 @@ namespace MTCG.Server {
 
         private async void HandleConnection() {
             await Task.Run(() => ProcessRequest());
-            _client.GetStream().Close();
             _client.Close();
         }
 
