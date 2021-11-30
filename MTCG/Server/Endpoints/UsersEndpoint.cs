@@ -29,7 +29,8 @@ namespace MTCG.Endpoints {
             User user = new() {
                 Id = Guid.NewGuid(),
                 UserName = credentials["Username"],
-                Password = credentials["Password"]
+                Password = credentials["Password"],
+                TokenExpiration = DateTime.Now
             };
 
             using UnitOfWork uow = new();

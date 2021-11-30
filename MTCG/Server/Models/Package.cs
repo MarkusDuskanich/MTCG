@@ -5,20 +5,18 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace MTCG.Models {
-    public class Package {
+    public class Package : ITEntity{
 
-        public int CardNumber { get; set; }
         public Guid Id { get; set; }
-        public string Name { get; set; }
-        public int Damage { get; set; }
-        public int Version { get; set; }
+        public string Name { get; set; } = "";
+        public int Damage { get; set; } = 0;
+        public int Version { get; set; } = 1;
 
         public Package() {
 
         }
 
         public Package(Package origin) {
-            CardNumber = origin.CardNumber;
             Id = origin.Id;
             Name = origin.Name;
             Damage = origin.Damage;

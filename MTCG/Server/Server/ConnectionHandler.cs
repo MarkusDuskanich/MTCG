@@ -63,7 +63,7 @@ namespace MTCG.Server {
             List<string> pathParameters = new();
 
             for (int i = 0; i < endpointComponents.Length; i++) {
-                if (endpointComponents[i] == HttpEndpointAttribute.PathParameter)
+                if (endpointComponents[i].StartsWith('{') && endpointComponents[i].EndsWith('}'))
                     pathParameters.Add(requestComponents[i]);
                 else if (endpointComponents[i] != requestComponents[i])
                     return false;

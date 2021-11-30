@@ -52,7 +52,6 @@ constraint fk_tradeoffers_users foreign key(userid) references users(id) on dele
 create table
 if not exists
 packages(
-cardnumber serial,
 id uuid not null,
 name text not null,
 damage integer not null,

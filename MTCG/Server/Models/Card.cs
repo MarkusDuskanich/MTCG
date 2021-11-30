@@ -5,11 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace MTCG.Models {
-    public class Card {
+    public class Card : ITEntity {
 
         public Guid Id { get; set; }
         public Guid UserId { get; set; }
-        public string Name { get; set; } = null;
+        public string Name { get; set; } = "";
         public int Damage { get; set; } = 0;
         public bool InDeck { get; set; } = false;
         public bool IsTradeOffer { get; set; } = false;

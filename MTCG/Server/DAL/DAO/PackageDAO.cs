@@ -34,15 +34,13 @@ namespace MTCG.DAL.DAO {
             command.CommandText = "SELECT * FROM packages";
             using var reader = command.ExecuteReader();
             List<Package> res = new();
-
+            
             while (reader.Read()) {
                 Package package = new();
-
-                package.CardNumber = reader.GetInt32(0);
-                package.Id = reader.GetGuid(1);
-                package.Name = reader[2].ToString();
-                package.Damage = reader.GetInt32(3);
-                package.Version = reader.GetInt32(4);
+                package.Id = reader.GetGuid(0);
+                package.Name = reader[1].ToString();
+                package.Damage = reader.GetInt32(2);
+                package.Version = reader.GetInt32(3);
 
                 res.Add(package);
             }
@@ -73,7 +71,7 @@ namespace MTCG.DAL.DAO {
             if (Connection == null)
                 throw new NoDbConnectionException($"connection is null in {GetType().Name}");
 
-            string query = "UPDATE users SET (id,name,damage,version)" +
+            string query = "UPDATE packages SET (id,name,damage,version)" +
                 "= (@id,@name,@damage,@newversion)" +
                 $"WHERE id = @id AND version = @oldversion";
 

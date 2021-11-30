@@ -1,4 +1,5 @@
 ﻿using MTCG.DAL.Context;
+using MTCG.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace MTCG.DAL.Repository {
-    public class GenericRepository<TEntity> where TEntity : class {
+    //this and table should only allow IEntity classes
+    public class GenericRepository<TEntity> where TEntity : class, ITEntity{
         private DBTable<TEntity> _table;
 
         public GenericRepository(MTCGContext mtcgContext) {

@@ -77,8 +77,8 @@ namespace MTCG.DAL.DAO {
             command.Parameters.AddWithValue("@wins", entity.Wins);
             command.Parameters.AddWithValue("@losses", entity.Losses);
             command.Parameters.AddWithValue("@token", entity.Token ?? (object)DBNull.Value);
-            command.Parameters.AddWithValue("@tokenexpiration", entity.TokenExpiration ?? (object)DBNull.Value);
-            command.Parameters.AddWithValue("@lastlogin", entity.LastLogin ?? (object)DBNull.Value);
+            command.Parameters.AddWithValue("@tokenexpiration", entity.TokenExpiration);
+            command.Parameters.AddWithValue("@lastlogin", entity.LastLogin);
             command.Parameters.AddWithValue("@loginstreak", entity.LoginStreak);
             command.Parameters.AddWithValue("@version", entity.Version);
 
@@ -106,8 +106,8 @@ namespace MTCG.DAL.DAO {
             command.Parameters.AddWithValue("@wins", entityToUpdate.Wins);
             command.Parameters.AddWithValue("@losses", entityToUpdate.Losses);
             command.Parameters.AddWithValue("@token", entityToUpdate.Token ?? (object)DBNull.Value);
-            command.Parameters.AddWithValue("@tokenexpiration", entityToUpdate.TokenExpiration ?? (object)DBNull.Value);
-            command.Parameters.AddWithValue("@lastlogin", entityToUpdate.LastLogin ?? (object)DBNull.Value);
+            command.Parameters.AddWithValue("@tokenexpiration", entityToUpdate.TokenExpiration);
+            command.Parameters.AddWithValue("@lastlogin", entityToUpdate.LastLogin);
             command.Parameters.AddWithValue("@loginstreak", entityToUpdate.LoginStreak);
             command.Parameters.AddWithValue("@newversion", entityToUpdate.Version + 1);
             command.Parameters.AddWithValue("@oldversion", entityToUpdate.Version);
