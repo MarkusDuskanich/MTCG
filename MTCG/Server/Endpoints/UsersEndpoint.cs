@@ -20,6 +20,12 @@ namespace MTCG.Endpoints {
         [HttpMethod(HttpMethod.POST)]
         public void Register() {
             var credentials = JsonConvert.DeserializeObject<Dictionary<string, string>>(_request.Content);
+
+            if(credentials == null) {
+                _response.Send(HttpStatus.BadRequest);
+                return;
+            }
+
             User user = new() {
                 Id = Guid.NewGuid(),
                 UserName = credentials["Username"],

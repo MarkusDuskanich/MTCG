@@ -60,9 +60,6 @@ namespace MTCG.DAL {
             }
         }
 
-        /// <summary>
-        /// </summary>
-        /// <exception cref="Exceptions.StaleObjectStateException"></exception>
         public void Save() {
             try {
                 s_semaphore.WaitOne();

@@ -17,9 +17,9 @@ namespace MTCG.Endpoints {
         [HttpMethod(HttpMethod.DELETE)]
         public void ClearDB() {
             using UnitOfWork uow = new();
-            var res = uow.UserRepository.Get();
-            res.ForEach(item => uow.UserRepository.Delete(item));
 
+            uow.UserRepository.Get().ForEach(item => uow.UserRepository.Delete(item));
+            uow.PackageRepository.Get().ForEach(item => uow.PackageRepository.Delete(item));
 
             if (uow.TrySave())
                 _response.Send(HttpStatus.OK);
