@@ -1,13 +1,17 @@
-﻿using System;
+﻿using MTCG.DAL.DAO;
+using MTCG.Models;
 using Npgsql;
+using System;
 using System.Collections.Generic;
 using System.Data;
-using MTCG.DAL.DAO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace MTCG.DAL.Context {
     public class DBContext : IDisposable {
-        private readonly Dictionary<Type, dynamic> _tables = new();
-        private readonly Dictionary<Type, dynamic> _entityToDAO = new(); 
+        public Dictionary<ITEntity, EntityState> Entities { get; private set; } = new();
+        private readonly Dictionary<Type, dynamic> _typeToDao = new();
 
         private readonly NpgsqlConnection _connection;
 
@@ -19,30 +23,44 @@ namespace MTCG.DAL.Context {
                 throw new ArgumentException("No connection do db possible");
         }
 
-        public void LoadTable<TEntity>(IDAO<TEntity> dao) where TEntity : class{
-            dao.Connection = _connection;
-            _tables.Add(typeof(TEntity), new DBTable<TEntity>(dao.GetAll()));
-            _entityToDAO.Add(typeof(TEntity), dao);
+        public void LoadTable<TEntity>(string tableName) where TEntity : class, ITEntity{
+            var dao = new GenericDAO<TEntity>(_connection, tableName);
+            _typeToDao.Add(typeof(TEntity), dao);
+            dao.GetAll().ForEach(item => Entities.Add(item, EntityState.Unchanged));
         }
 
-        public DBTable<TEntity> Table<TEntity>() where TEntity : class{
-            return _tables[typeof(TEntity)] as DBTable<TEntity>;
-        }        
-        
+        public DBTable<TEntity> Table<TEntity>() where TEntity : class, ITEntity{
+            var res = new List<TEntity>();
+            foreach (var entity in Entities.Keys) {
+                if (entity.GetType() == typeof(TEntity))
+                    res.Add(entity as TEntity);
+            }
+            return new(res);
+        }
+
+        public void Attach<TEntity>(TEntity entity) where TEntity : class, ITEntity {
+            Entities.Add(entity, EntityState.Added);
+        }
+
         public void SaveChanges() {
             try {
                 using NpgsqlTransaction transaction = _connection.BeginTransaction();
-                foreach (var item in _tables) {
-                    foreach(var entity in item.Value.Entities) {
-                        if(entity.Value == EntityState.Added)
-                            _entityToDAO[item.Key].Insert(entity.Key);
-                        else if (entity.Value == EntityState.Modified)
-                            _entityToDAO[item.Key].Update(entity.Key);
-                        else if (entity.Value == EntityState.Deleted)
-                            _entityToDAO[item.Key].Delete(entity.Key);
+                foreach (var entity in Entities) {
+                    if (entity.Value == EntityState.Unchanged)
+                        continue;
+
+                    var dao = _typeToDao[entity.Key.GetType()];
+                    if (entity.Value == EntityState.Added)
+                        dao.Insert((ITEntity)entity.Key);
+                    else if(entity.Value == EntityState.Modified)
+                        dao.Update((ITEntity)entity.Key);
+                    else if(entity.Value == EntityState.Deleted) {
+                        dao.Delete((ITEntity)entity.Key);
                     }
                 }
+
                 transaction.Commit();
+
             } catch (Exception) {
                 throw;
             }

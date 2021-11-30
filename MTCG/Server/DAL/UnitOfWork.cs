@@ -72,7 +72,8 @@ namespace MTCG.DAL {
         public bool TrySave() {
             try {
                 Save();
-            } catch (Exception) {
+            } catch (Exception e) {
+                Console.WriteLine(e);
                 return false;
             }
             return true;

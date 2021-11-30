@@ -1,4 +1,4 @@
-﻿using MTCG.DAL.DAO;
+﻿using MTCG.Models;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -8,60 +8,56 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace MTCG.DAL.Context {
-    public class DBTable<TEntity> : IQueryable<TEntity> where TEntity : class {
+    public class DBTable<TEntity> : IQueryable<TEntity> where TEntity : class, ITEntity{
 
-        public Dictionary<TEntity, EntityState> Entities { get; } = new();
+        public List<TEntity> Entities { get; private set; } = new();
 
         public DBTable(List<TEntity> entities) {
-            entities.ForEach(entity => Entities.Add(entity, EntityState.Unchanged));
+            Entities = entities;
         }
 
-        private bool CompareEntityId(TEntity entity, Guid id) {
-            return (Guid)typeof(TEntity).GetProperty("Id").GetValue(entity) == id;
+        private bool HasId(TEntity entity, Guid id) {
+            return entity.Id == id;
         }
 
         public TEntity Find(Guid id) {
-            foreach (var entity in Entities.Keys) {
-                if (CompareEntityId(entity, id) && Entities[entity] != EntityState.Deleted)
+            foreach (var entity in Entities) {
+                if (HasId(entity, id))
                     return entity;
             }
             return null;
         }
 
-        public EntityState State(TEntity entity) {
-            return Entities[entity];
-        }
-
         public void Update(TEntity entityToUpdate) {
-            var destination = Find((Guid)typeof(TEntity).GetProperty("Id").GetValue(entityToUpdate));
+            var destination = Find(entityToUpdate.Id);
             var sourceProperties = typeof(TEntity).GetProperties();
             foreach (var sourceProp in sourceProperties) {
                 var targetProp = entityToUpdate.GetType().GetProperty(sourceProp.Name);
                 targetProp.SetValue(destination, sourceProp.GetValue(entityToUpdate, null), null);
             }
-            Entities[destination] = EntityState.Modified;
         }
 
-        public void Delete(TEntity entityToUpdate) {
-            Entities[entityToUpdate] = EntityState.Deleted;
+        public void Delete(TEntity entityToDelete) {
+            Entities.Remove(entityToDelete);
         }
 
         public void Add(TEntity entity) {
-            Entities.Add(entity, EntityState.Added);
+            Entities.Add(entity);
         }
 
-        public Type ElementType => Entities.Keys.AsQueryable().ElementType;
 
-        public Expression Expression => Entities.Keys.AsQueryable().Expression;
+        public Type ElementType => Entities.AsQueryable().ElementType;
 
-        public IQueryProvider Provider => Entities.Keys.AsQueryable().Provider;
+        public Expression Expression => Entities.AsQueryable().Expression;
+
+        public IQueryProvider Provider => Entities.AsQueryable().Provider;
 
         public IEnumerator<TEntity> GetEnumerator() {
-            return Entities.Keys.AsQueryable().GetEnumerator();
+            return Entities.AsQueryable().GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator() {
-            return Entities.Keys.AsQueryable().GetEnumerator();
+            return Entities.AsQueryable().GetEnumerator();
         }
     }
 }

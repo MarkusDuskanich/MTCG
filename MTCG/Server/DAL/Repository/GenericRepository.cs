@@ -8,11 +8,12 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace MTCG.DAL.Repository {
-    //this and table should only allow IEntity classes
     public class GenericRepository<TEntity> where TEntity : class, ITEntity{
-        private DBTable<TEntity> _table;
+        private readonly MTCGContext _context;
+        private readonly DBTable<TEntity> _table;
 
         public GenericRepository(MTCGContext mtcgContext) {
+            _context = mtcgContext;
             _table = mtcgContext.Table<TEntity>();
         }
 
@@ -25,9 +26,9 @@ namespace MTCG.DAL.Repository {
                 query = query.Where(filter);
 
             if (orderBy != null)
-                return orderBy(query).Where((entity) => _table.State(entity) != EntityState.Deleted).ToList();
+                return orderBy(query).ToList();
             else
-                return query.Where((entity) => _table.State(entity) != EntityState.Deleted).ToList();
+                return query.ToList();
         }
 
         public TEntity GetById(Guid id) {
@@ -35,6 +36,7 @@ namespace MTCG.DAL.Repository {
         }
 
         public void Insert(TEntity entity) {
+            _context.Attach(entity);
             _table.Add(entity);
         }
 
@@ -44,10 +46,12 @@ namespace MTCG.DAL.Repository {
         }
 
         public void Delete(TEntity entityToDelete) {
+            _context.Entities[entityToDelete] = EntityState.Deleted;
             _table.Delete(entityToDelete);
         }
 
         public void Update(TEntity entityToUpdate) {
+            _context.Entities[entityToUpdate] = EntityState.Modified;
             _table.Update(entityToUpdate);
         }
     }
