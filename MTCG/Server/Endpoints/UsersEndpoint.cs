@@ -10,8 +10,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Text.Json;
-using System.Threading.Tasks;
 
 namespace MTCG.Endpoints {
     [HttpEndpoint("/users")]
@@ -27,15 +25,14 @@ namespace MTCG.Endpoints {
                 UserName = credentials["Username"],
                 Password = credentials["Password"]
             };
+
             using UnitOfWork uow = new();
             uow.UserRepository.Insert(user);
 
-            try {
-                uow.Save();
+            if (uow.TrySave())
                 _response.Send(HttpStatus.OK);
-            } catch (Exception) {
+            else
                 _response.Send(HttpStatus.InternalServerError);
-            }
         }
     
     }

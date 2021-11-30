@@ -11,7 +11,7 @@ namespace MTCG.DAL.DAO {
 
         public void Delete(User entityToDelete) {
             if (Connection == null)
-                throw new NoDbConnectionException($"connection is null in {typeof(UserDAO).Name}");
+                throw new NoDbConnectionException($"connection is null in {GetType().Name}");
 
             string query = "DELETE FROM users WHERE id = @id";
 
@@ -21,12 +21,12 @@ namespace MTCG.DAL.DAO {
             int result = command.ExecuteNonQuery();
 
             if (result < 0)
-                Console.WriteLine("Error deleting data from Database!");
+                throw new StaleObjectStateException($"delete in table {GetType().Name}");
         }
 
         public List<User> GetAll() {
             if (Connection == null)
-                throw new NoDbConnectionException($"connection is null in {typeof(UserDAO).Name}");
+                throw new NoDbConnectionException($"connection is null in {GetType().Name}");
 
             using var command = Connection.CreateCommand();
             command.CommandText = "SELECT * FROM users";
@@ -62,7 +62,7 @@ namespace MTCG.DAL.DAO {
 
         public void Insert(User entity) {
             if (Connection == null)
-                throw new NoDbConnectionException($"connection is null in {typeof(UserDAO).Name}");
+                throw new NoDbConnectionException($"connection is null in {GetType().Name}");
 
             string query = "INSERT INTO users (id,username,password,bio,image,coins,wins,losses,token,tokenexpiration,lastlogin,loginstreak,version) VALUES" +
                 " (@id,@username,@password,@bio,@image,@coins,@wins,@losses,@token,@tokenexpiration,@lastlogin,@loginstreak,@version)";
@@ -85,12 +85,12 @@ namespace MTCG.DAL.DAO {
             int result = command.ExecuteNonQuery();
 
             if (result < 0)
-                Console.WriteLine("Error inserting data into Database!");
+                throw new StaleObjectStateException($"insert in table {GetType().Name}");
         }
 
         public void Update(User entityToUpdate) {
             if (Connection == null)
-                throw new NoDbConnectionException($"connection is null in {typeof(UserDAO).Name}");
+                throw new NoDbConnectionException($"connection is null in {GetType().Name}");
 
             string query = "UPDATE users SET (username,bio,password,image,coins,wins,losses,token,tokenexpiration,lastlogin,loginstreak,version)" +
                 "= (@username,@password,@bio,@image,@coins,@wins,@losses,@token,@tokenexpiration,@lastlogin,@loginstreak,@newversion)" +
@@ -114,7 +114,7 @@ namespace MTCG.DAL.DAO {
 
             int result = command.ExecuteNonQuery();
             if (result == 0)
-                throw new StaleObjectStateException("in table users");
+                throw new StaleObjectStateException($"update in table {GetType().Name}");
         }
     }
 }

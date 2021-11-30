@@ -1,10 +1,4 @@
 ﻿using MTCG.Http.Protocol;
-using MTCG.Http.Status;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MTCG.Endpoints {
     public class Endpoint {

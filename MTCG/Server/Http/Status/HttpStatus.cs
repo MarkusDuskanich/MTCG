@@ -12,7 +12,7 @@ namespace MTCG.Http.Status {
         OK,
         [Description("400 Bad Request")]
         BadRequest, 
-        [Description("401 Unauthorized ")]
+        [Description("401 Unauthorized")]
         Unauthorized,
         [Description("403 Forbidden")]
         Forbidden,

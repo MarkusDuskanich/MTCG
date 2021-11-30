@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace MTCG.DAL {
     public class UnitOfWork : IDisposable {
+        
         private readonly MTCGContext _context;
 
         private static readonly Semaphore s_semaphore = new(1, 1);
@@ -23,6 +24,32 @@ namespace MTCG.DAL {
             } 
         }
 
+        public GenericRepository<Card> _cardRepository;
+        public GenericRepository<Card> CardRepository {
+            get {
+                if (_cardRepository == null)
+                    _cardRepository = new(_context);
+                return _cardRepository;
+            }
+        }
+
+        public GenericRepository<TradeOffer> _tradeOfferRepository;
+        public GenericRepository<TradeOffer> TradeOfferRepository {
+            get {
+                if (_tradeOfferRepository == null)
+                    _tradeOfferRepository = new(_context);
+                return _tradeOfferRepository;
+            }
+        }
+
+        public GenericRepository<Package> _packageRepository;
+        public GenericRepository<Package> PackageRepository {
+            get {
+                if (_packageRepository == null)
+                    _packageRepository = new(_context);
+                return _packageRepository;
+            }
+        }
 
         public UnitOfWork() {
             try {
@@ -43,6 +70,15 @@ namespace MTCG.DAL {
             } finally {
                 s_semaphore.Release();
             }
+        }
+
+        public bool TrySave() {
+            try {
+                Save();
+            } catch (Exception) {
+                return false;
+            }
+            return true;
         }
 
         private bool _disposed = false;

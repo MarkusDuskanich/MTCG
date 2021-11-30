@@ -11,7 +11,9 @@ namespace MTCG.DAL.Context {
 
         public MTCGContext() : base("Host=localhost;Username=postgres;Password=postgres;Database=mtcgdb") {
             LoadTable(new UserDAO());
+            LoadTable(new CardDAO());
+            LoadTable(new PackageDAO());
+            LoadTable(new TradeOfferDAO());
         }
-
     }
 }

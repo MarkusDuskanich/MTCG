@@ -20,12 +20,11 @@ namespace MTCG.Endpoints {
             var res = uow.UserRepository.Get();
             res.ForEach(item => uow.UserRepository.Delete(item));
 
-            try {
-                uow.Save();
+
+            if (uow.TrySave())
                 _response.Send(HttpStatus.OK);
-            } catch (Exception) {
+            else
                 _response.Send(HttpStatus.InternalServerError);
-            }
         }
     }
 }

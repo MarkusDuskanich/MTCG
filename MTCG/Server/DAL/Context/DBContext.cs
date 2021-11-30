@@ -18,8 +18,8 @@ namespace MTCG.DAL.Context {
         public DBContext(string connectionString) {
             _connection = new NpgsqlConnection(connectionString);
             _connection.Open();
-            //error handling in case of no connection
-            Console.WriteLine("db connection is: " + _connection.State);
+            if (_connection.State == ConnectionState.Closed)
+                throw new ArgumentException("No connection do db possible");
         }
 
         public void LoadTable<TEntity>(IDAO<TEntity> dao) where TEntity : class{
@@ -33,15 +33,21 @@ namespace MTCG.DAL.Context {
         }        
         
         public void SaveChanges() {
-            foreach (var item in _tables) {
-                foreach(var entity in item.Value.Entities) {
-                    if(entity.Value == EntityState.Added)
-                        _entityToDAO[item.Key].Insert(entity.Key);
-                    else if (entity.Value == EntityState.Modified)
-                        _entityToDAO[item.Key].Update(entity.Key);
-                    else if (entity.Value == EntityState.Deleted)
-                        _entityToDAO[item.Key].Delete(entity.Key);
+            try {
+                using NpgsqlTransaction transaction = _connection.BeginTransaction();
+                foreach (var item in _tables) {
+                    foreach(var entity in item.Value.Entities) {
+                        if(entity.Value == EntityState.Added)
+                            _entityToDAO[item.Key].Insert(entity.Key);
+                        else if (entity.Value == EntityState.Modified)
+                            _entityToDAO[item.Key].Update(entity.Key);
+                        else if (entity.Value == EntityState.Deleted)
+                            _entityToDAO[item.Key].Delete(entity.Key);
+                    }
                 }
+                transaction.Commit();
+            } catch (Exception) {
+                throw;
             }
         }
 
