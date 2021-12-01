@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace MTCG.DAL.Context {
     public class DBContext : IDisposable {
         public Dictionary<ITEntity, EntityState> Entities { get; private set; } = new();
-        private readonly Dictionary<Type, dynamic> _typeToDao = new();
+        private readonly Dictionary<Type, GenericDAO> _typeToDao = new();
 
         private readonly NpgsqlConnection _connection;
 
@@ -24,9 +24,9 @@ namespace MTCG.DAL.Context {
         }
 
         public void LoadTable<TEntity>(string tableName) where TEntity : class, ITEntity{
-            var dao = new GenericDAO<TEntity>(_connection, tableName);
+            var dao = new GenericDAO(_connection, tableName);
             _typeToDao.Add(typeof(TEntity), dao);
-            dao.GetAll().ForEach(item => Entities.Add(item, EntityState.Unchanged));
+            dao.GetAll<TEntity>().ForEach(item => Entities.Add(item, EntityState.Unchanged));
         }
 
         public DBTable<TEntity> Table<TEntity>() where TEntity : class, ITEntity{
@@ -51,11 +51,11 @@ namespace MTCG.DAL.Context {
 
                     var dao = _typeToDao[entity.Key.GetType()];
                     if (entity.Value == EntityState.Added)
-                        dao.Insert((dynamic)entity.Key);
+                        dao.Insert(entity.Key);
                     else if(entity.Value == EntityState.Modified)
-                        dao.Update((dynamic)entity.Key);
+                        dao.Update(entity.Key);
                     else if(entity.Value == EntityState.Deleted) {
-                        dao.Delete((dynamic)entity.Key);
+                        dao.Delete(entity.Key);
                     }
                 }
 

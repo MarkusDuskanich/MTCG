@@ -8,7 +8,7 @@ using System.Linq;
 using System.Reflection;
 
 namespace MTCG.DAL.DAO {
-    public class GenericDAO<TEntity> where TEntity : class, ITEntity {
+    public class GenericDAO{
 
         public NpgsqlConnection Connection { get; }
         public string TableName { get; }
@@ -18,7 +18,7 @@ namespace MTCG.DAL.DAO {
             TableName = tableName;
         }
 
-        public void Delete(TEntity entityToDelete) {
+        public void Delete<TEntity>(TEntity entityToDelete) where TEntity : class, ITEntity {
 
             string query = $"DELETE FROM {TableName} WHERE id = @id";
 
@@ -31,7 +31,7 @@ namespace MTCG.DAL.DAO {
                 throw new StaleObjectStateException($"delete in table {TableName}");
         }
 
-        public void Update(TEntity entityToUpdate) {
+        public void Update<TEntity>(TEntity entityToUpdate) where TEntity : class, ITEntity {
             var propInfo = entityToUpdate.GetType().GetProperties();
             var propNames = from info in propInfo select info.Name.ToLower();
 
@@ -66,7 +66,7 @@ namespace MTCG.DAL.DAO {
                 throw new StaleObjectStateException($"update in table {TableName}");
         }
 
-        public void Insert(TEntity entityToInsert) {
+        public void Insert<TEntity>(TEntity entityToInsert) where TEntity : class, ITEntity {
             var propInfo = entityToInsert.GetType().GetProperties();
             var propNames = from info in propInfo select info.Name.ToLower();
 
@@ -94,7 +94,7 @@ namespace MTCG.DAL.DAO {
                 throw new StaleObjectStateException($"insert in table {TableName}");
         }
 
-        public List<TEntity> GetAll() {
+        public List<TEntity> GetAll<TEntity>() where TEntity : class, ITEntity {
             using var command = Connection.CreateCommand();
             command.CommandText = $"SELECT * FROM {TableName}";
             using var reader = command.ExecuteReader();
@@ -122,7 +122,7 @@ namespace MTCG.DAL.DAO {
             return result;
         }
 
-        private static PropertyInfo GetPropertyFromString(TEntity entity, string s) {
+        private static PropertyInfo GetPropertyFromString<TEntity>(TEntity entity, string s) where TEntity : class, ITEntity {
             return entity.GetType().GetProperties().ToList().Find(propInfo => propInfo.Name.ToLower() == s);
         }
 

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace MTCG.DAL.Context {
     public class MTCGContext : DBContext {
 
-        public MTCGContext() : base("Host=localhost;Username=postgres;Password=postgres;Database=mtcgdb") {
+        public MTCGContext() : base("Host=localhost;Username=postgres;Password=postgres;Database=mtcgdb;IncludeErrorDetail=true") {
             LoadTable<User>("users");
             LoadTable<Card>("cards");
             LoadTable<Package>("packages");
