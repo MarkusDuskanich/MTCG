@@ -1,4 +1,5 @@
 ﻿using MTCG.DAL.DAO;
+using MTCG.DAL.Exceptions;
 using MTCG.Models;
 using Npgsql;
 using System;
@@ -15,12 +16,11 @@ namespace MTCG.DAL.Context {
 
         private readonly NpgsqlConnection _connection;
 
-
         public DBContext(string connectionString) {
             _connection = new NpgsqlConnection(connectionString);
             _connection.Open();
-            if (_connection.State == ConnectionState.Closed)
-                throw new ArgumentException("No connection do db possible");
+            if (_connection.State != ConnectionState.Open)
+                throw new DBConnectionException("connection to DB not open");
         }
 
         public void LoadTable<TEntity>(string tableName) where TEntity : class, ITEntity{

@@ -1,4 +1,5 @@
 ﻿using MTCG.DAL.Context;
+using MTCG.DAL.Exceptions;
 using MTCG.DAL.Repository;
 using MTCG.Models;
 using System;
@@ -12,7 +13,6 @@ namespace MTCG.DAL {
     public class UnitOfWork : IDisposable {
         
         private readonly MTCGContext _context;
-
         private static readonly Semaphore s_semaphore = new(1, 1);
 
         public GenericRepository<User> _userRepository;
@@ -55,7 +55,7 @@ namespace MTCG.DAL {
             try {
                 s_semaphore.WaitOne();
                 _context = new MTCGContext();
-            } finally {
+            }finally {
                 s_semaphore.Release();
             }
         }

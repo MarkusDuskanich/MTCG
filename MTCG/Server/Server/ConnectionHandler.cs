@@ -32,8 +32,13 @@ namespace MTCG.Server {
             try {
                 var targetClass = GetTargetClassOfRequest();
                 var targetMethod = GetTargetMethodOfRequest(targetClass);
-                InvokeMethodOfRequest(targetMethod, targetClass);
-
+                try {
+                    InvokeMethodOfRequest(targetMethod, targetClass);
+                } catch (Exception e) {
+                    Console.WriteLine(e);
+                    _response.Status = HttpStatus.InternalServerError;
+                    _response.Send();
+                }
             } catch (InvalidOperationException) {
                 _response.Status = HttpStatus.NotFound;
                 _response.Send();

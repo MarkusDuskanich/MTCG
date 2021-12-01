@@ -98,6 +98,7 @@ namespace MTCG.DAL.DAO {
             using var command = Connection.CreateCommand();
             command.CommandText = $"SELECT * FROM {TableName}";
             using var reader = command.ExecuteReader();
+
             var columnNames = GetColumnNames(reader);
 
             List<TEntity> result = new();
@@ -115,6 +116,8 @@ namespace MTCG.DAL.DAO {
                     MethodInfo parse = targetProp.PropertyType.GetMethod("Parse", new Type[] { typeof(string) });
                     if (parse != null)
                         targetProp.SetValue(entity, parse.Invoke(null, new object[] { reader[i].ToString() }));
+                    else
+                        throw new OrmException($"Could not map prop<{targetProp.Name}> to col name<{columnNames[i]}>");
                 }
                 result.Add(entity);
             }
@@ -127,7 +130,7 @@ namespace MTCG.DAL.DAO {
         }
 
         private static string[] GetColumnNames(NpgsqlDataReader reader) {
-            var columnNames = from item in reader.GetColumnSchema() select item.ColumnName;
+            var columnNames = from item in reader.GetColumnSchema() select item.ColumnName.ToLower();
             return columnNames.ToArray();
         }
     }
