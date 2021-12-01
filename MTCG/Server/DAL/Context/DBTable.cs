@@ -16,13 +16,9 @@ namespace MTCG.DAL.Context {
             Entities = entities;
         }
 
-        private bool HasId(TEntity entity, Guid id) {
-            return entity.Id == id;
-        }
-
         public TEntity Find(Guid id) {
             foreach (var entity in Entities) {
-                if (HasId(entity, id))
+                if (entity.Id == id)
                     return entity;
             }
             return null;
@@ -44,7 +40,6 @@ namespace MTCG.DAL.Context {
         public void Add(TEntity entity) {
             Entities.Add(entity);
         }
-
 
         public Type ElementType => Entities.AsQueryable().ElementType;
 

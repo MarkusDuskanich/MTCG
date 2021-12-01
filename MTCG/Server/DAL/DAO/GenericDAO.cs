@@ -85,8 +85,6 @@ namespace MTCG.DAL.DAO {
             using NpgsqlCommand command = new NpgsqlCommand(query, Connection);
 
             foreach (var item in propInfo) {
-                Console.WriteLine(item.Name);
-                Console.WriteLine(item.GetValue(entityToInsert));
                 command.Parameters.AddWithValue($"@{item.Name.ToLower()}", item.GetValue(entityToInsert));
             }
 

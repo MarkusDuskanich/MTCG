@@ -51,11 +51,11 @@ namespace MTCG.DAL.Context {
 
                     var dao = _typeToDao[entity.Key.GetType()];
                     if (entity.Value == EntityState.Added)
-                        dao.Insert((ITEntity)entity.Key);
+                        dao.Insert((dynamic)entity.Key);
                     else if(entity.Value == EntityState.Modified)
-                        dao.Update((ITEntity)entity.Key);
+                        dao.Update((dynamic)entity.Key);
                     else if(entity.Value == EntityState.Deleted) {
-                        dao.Delete((ITEntity)entity.Key);
+                        dao.Delete((dynamic)entity.Key);
                     }
                 }
 
