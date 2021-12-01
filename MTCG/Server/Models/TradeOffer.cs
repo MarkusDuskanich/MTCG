@@ -1,10 +1,12 @@
-﻿using System;
+﻿using MTCG.Models.Attributes;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace MTCG.Models {
+    [TEntity("tradeoffers")]
     public class TradeOffer : ITEntity{
         public Guid Id { get; set; }
         public Guid CardId { get; set; }

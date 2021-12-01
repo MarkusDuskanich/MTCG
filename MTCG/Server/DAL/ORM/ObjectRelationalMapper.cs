@@ -1,26 +1,24 @@
 ﻿using MTCG.DAL.Exceptions;
 using MTCG.Models;
+using MTCG.Models.Attributes;
 using Npgsql;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 
-namespace MTCG.DAL.DAO {
-    public class GenericDAO{
+namespace MTCG.DAL.ORM {
+    public class ObjectRelationalMapper{
 
         public NpgsqlConnection Connection { get; }
-        public string TableName { get; }
 
-        public GenericDAO(NpgsqlConnection connection, string tableName) {
+        public ObjectRelationalMapper(NpgsqlConnection connection) {
             Connection = connection;
-            TableName = tableName;
         }
 
-        public void Delete<TEntity>(TEntity entityToDelete) where TEntity : class, ITEntity {
 
-            string query = $"DELETE FROM {TableName} WHERE id = @id";
+        public void Delete<TEntity>(TEntity entityToDelete) where TEntity : class, ITEntity {
+            string query = $"DELETE FROM {GetTableName(entityToDelete.GetType())} WHERE id = @id";
 
             using NpgsqlCommand command = new NpgsqlCommand(query, Connection);
             command.Parameters.AddWithValue("@id", entityToDelete.Id);
@@ -28,7 +26,7 @@ namespace MTCG.DAL.DAO {
             int result = command.ExecuteNonQuery();
 
             if (result < 0)
-                throw new StaleObjectStateException($"delete in table {TableName}");
+                throw new StaleObjectStateException($"delete in table {entityToDelete.GetType()}");
         }
 
         public void Update<TEntity>(TEntity entityToUpdate) where TEntity : class, ITEntity {
@@ -47,7 +45,7 @@ namespace MTCG.DAL.DAO {
             columns = columns.Remove(columns.Length - 1);
             param = param.Remove(param.Length - 1);
 
-            string query = $"UPDATE {TableName} SET ({columns})" +
+            string query = $"UPDATE {GetTableName(entityToUpdate.GetType())} SET ({columns})" +
                 $"= ({param})" +
                 $"WHERE id = @id AND version = @oldversion";
 
@@ -63,7 +61,7 @@ namespace MTCG.DAL.DAO {
             int result = command.ExecuteNonQuery();
 
             if (result == 0)
-                throw new StaleObjectStateException($"update in table {TableName}");
+                throw new StaleObjectStateException($"update in table {entityToUpdate.GetType()}");
         }
 
         public void Insert<TEntity>(TEntity entityToInsert) where TEntity : class, ITEntity {
@@ -81,7 +79,7 @@ namespace MTCG.DAL.DAO {
             columns = columns.Remove(columns.Length - 1);
             param = param.Remove(param.Length - 1);
 
-            string query = $"INSERT INTO {TableName} ({columns}) VALUES ({param})";
+            string query = $"INSERT INTO {GetTableName(entityToInsert.GetType())} ({columns}) VALUES ({param})";
             using NpgsqlCommand command = new NpgsqlCommand(query, Connection);
 
             foreach (var item in propInfo) {
@@ -91,12 +89,12 @@ namespace MTCG.DAL.DAO {
             int result = command.ExecuteNonQuery();
 
             if (result < 0)
-                throw new StaleObjectStateException($"insert in table {TableName}");
+                throw new StaleObjectStateException($"insert in table {entityToInsert.GetType()}");
         }
 
         public List<TEntity> GetAll<TEntity>() where TEntity : class, ITEntity {
             using var command = Connection.CreateCommand();
-            command.CommandText = $"SELECT * FROM {TableName}";
+            command.CommandText = $"SELECT * FROM {GetTableName(typeof(TEntity))}";
             using var reader = command.ExecuteReader();
 
             var columnNames = GetColumnNames(reader);
@@ -113,20 +111,27 @@ namespace MTCG.DAL.DAO {
                         continue;
                     }
 
-                    MethodInfo parse = targetProp.PropertyType.GetMethod("Parse", new Type[] { typeof(string) });
-                    if (parse != null)
+                    try {
+                        MethodInfo parse = targetProp.PropertyType.GetMethod("Parse", new Type[] { typeof(string) });
                         targetProp.SetValue(entity, parse.Invoke(null, new object[] { reader[i].ToString() }));
-                    else
+                    } catch (Exception) {
                         throw new OrmException($"Could not map prop<{targetProp.Name}> to col name<{columnNames[i]}>");
+                    }
                 }
                 result.Add(entity);
             }
 
             return result;
         }
+        private static string GetTableName(Type entityType){
+            var res = entityType.GetCustomAttribute<TEntityAttribute>(false)?.TableName;
+            if (res == null)
+                throw new OrmException($"Could not get table name of {entityType.Name}");
+            return res;
+        }
 
         private static PropertyInfo GetPropertyFromString<TEntity>(TEntity entity, string s) where TEntity : class, ITEntity {
-            return entity.GetType().GetProperties().ToList().Find(propInfo => propInfo.Name.ToLower() == s);
+            return entity.GetType().GetProperties().ToList().Find(propInfo => propInfo.Name.ToLower() == s.ToLower());
         }
 
         private static string[] GetColumnNames(NpgsqlDataReader reader) {

@@ -1,10 +1,12 @@
-﻿using System;
+﻿using MTCG.Models.Attributes;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace MTCG.Models {
+    [TEntity("cards")]
     public class Card : ITEntity {
 
         public Guid Id { get; set; }

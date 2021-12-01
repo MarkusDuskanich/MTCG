@@ -1,4 +1,4 @@
-﻿using MTCG.DAL.DAO;
+﻿using MTCG.DAL.ORM;
 using MTCG.Models;
 using System;
 using System.Collections.Generic;
@@ -10,10 +10,10 @@ namespace MTCG.DAL.Context {
     public class MTCGContext : DBContext {
 
         public MTCGContext() : base("Host=localhost;Username=postgres;Password=postgres;Database=mtcgdb;IncludeErrorDetail=true") {
-            LoadTable<User>("users");
-            LoadTable<Card>("cards");
-            LoadTable<Package>("packages");
-            LoadTable<TradeOffer>("tradeoffers");
+            LoadTable<User>();
+            LoadTable<Card>();
+            LoadTable<Package>();
+            LoadTable<TradeOffer>();
         }
     }
 }

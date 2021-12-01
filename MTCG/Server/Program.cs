@@ -1,6 +1,6 @@
 ﻿using MTCG.Client;
 using MTCG.DAL;
-using MTCG.DAL.DAO;
+using MTCG.DAL.ORM;
 using MTCG.Http.Method;
 using MTCG.Models;
 using MTCG.Server;

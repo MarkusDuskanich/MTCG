@@ -1,4 +1,4 @@
-﻿using MTCG.DAL.DAO;
+﻿using MTCG.DAL.ORM;
 using MTCG.DAL.Exceptions;
 using MTCG.Models;
 using Npgsql;
@@ -12,7 +12,6 @@ using System.Threading.Tasks;
 namespace MTCG.DAL.Context {
     public class DBContext : IDisposable {
         public Dictionary<ITEntity, EntityState> Entities { get; private set; } = new();
-        private readonly Dictionary<Type, GenericDAO> _typeToDao = new();
 
         private readonly NpgsqlConnection _connection;
 
@@ -23,10 +22,9 @@ namespace MTCG.DAL.Context {
                 throw new DBConnectionException("connection to DB not open");
         }
 
-        public void LoadTable<TEntity>(string tableName) where TEntity : class, ITEntity{
-            var dao = new GenericDAO(_connection, tableName);
-            _typeToDao.Add(typeof(TEntity), dao);
-            dao.GetAll<TEntity>().ForEach(item => Entities.Add(item, EntityState.Unchanged));
+        public void LoadTable<TEntity>() where TEntity : class, ITEntity{
+            var orm = new ObjectRelationalMapper(_connection);
+            orm.GetAll<TEntity>().ForEach(item => Entities.Add(item, EntityState.Unchanged));
         }
 
         public DBTable<TEntity> Table<TEntity>() where TEntity : class, ITEntity{
@@ -45,17 +43,17 @@ namespace MTCG.DAL.Context {
         public void SaveChanges() {
             try {
                 using NpgsqlTransaction transaction = _connection.BeginTransaction();
+                var orm = new ObjectRelationalMapper(_connection);
                 foreach (var entity in Entities) {
                     if (entity.Value == EntityState.Unchanged)
                         continue;
-
-                    var dao = _typeToDao[entity.Key.GetType()];
+  
                     if (entity.Value == EntityState.Added)
-                        dao.Insert(entity.Key);
+                        orm.Insert(entity.Key);
                     else if(entity.Value == EntityState.Modified)
-                        dao.Update(entity.Key);
+                        orm.Update(entity.Key);
                     else if(entity.Value == EntityState.Deleted) {
-                        dao.Delete(entity.Key);
+                        orm.Delete(entity.Key);
                     }
                 }
 
