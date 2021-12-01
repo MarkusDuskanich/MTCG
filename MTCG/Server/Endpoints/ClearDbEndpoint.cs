@@ -10,21 +10,22 @@ using System;
 using System.Collections.Generic;
 
 namespace MTCG.Endpoints {
-    [HttpEndpoint("/clearDb")]
-    class ClearDbEndpoint : Endpoint {
-        public ClearDbEndpoint(HttpRequest request, HttpResponse response) : base(request, response) { }
+    [HttpEndpoint("/clearDB")]
+    class ClearDBEndpoint : Endpoint {
+        public ClearDBEndpoint(HttpRequest request, HttpResponse response) : base(request, response) { }
 
         [HttpMethod(HttpMethod.DELETE)]
         public void ClearDB() {
+            //add authorization so only admin token can delete db
+
             using UnitOfWork uow = new();
 
             uow.UserRepository.Get().ForEach(item => uow.UserRepository.Delete(item));
             uow.PackageRepository.Get().ForEach(item => uow.PackageRepository.Delete(item));
 
-            if (uow.TrySave())
-                _response.Send(HttpStatus.OK);
-            else
-                _response.Send(HttpStatus.InternalServerError);
+            uow.Save();
+            _response.Send(HttpStatus.OK);
+
         }
     }
 }
