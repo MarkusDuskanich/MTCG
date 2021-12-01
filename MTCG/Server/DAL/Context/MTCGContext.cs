@@ -9,11 +9,11 @@ using System.Threading.Tasks;
 namespace MTCG.DAL.Context {
     public class MTCGContext : DBContext {
 
-        public MTCGContext() : base("Host=localhost;Username=postgres;Password=postgres;Database=mtcgdb") {
-            LoadTable(new UserDAO());
-            LoadTable(new CardDAO());
-            LoadTable(new PackageDAO());
-            LoadTable(new TradeOfferDAO());
+        public MTCGContext() : base("Host=localhost;Username=postgres;Password=postgres;Database=mtcgdb;IncludeErrorDetail=true") {
+            LoadTable<User>("users");
+            LoadTable<Card>("cards");
+            LoadTable<Package>("packages");
+            LoadTable<TradeOffer>("tradeoffers");
         }
     }
 }
