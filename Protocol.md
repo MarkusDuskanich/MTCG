@@ -10,3 +10,5 @@ in order to automate http requests insomnia is being used
 28.11.2021 4h designed database structure, wrote sql script
 29.11.2021 10h implemented dal, repository, DAO, dbcontext and UnitofWork class, created first endpoint for user registration
 30.11.2021 2h finished dal
+30.11.2021 2h reworked dao to generic version
+1.12.2021 4h finished dal rework
