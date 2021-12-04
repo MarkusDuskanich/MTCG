@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace MTCG.Models {
-    [TEntity("tradeoffers")]
+    [DataSource("tradeoffers")]
     public class TradeOffer : ITEntity{
         public Guid Id { get; set; }
         public Guid CardId { get; set; }

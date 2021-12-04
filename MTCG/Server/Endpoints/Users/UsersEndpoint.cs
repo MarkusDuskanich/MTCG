@@ -11,7 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace MTCG.Endpoints {
+namespace MTCG.Endpoints.Users {
     [HttpEndpoint("/users")]
     class UsersEndpoint : Endpoint {
 
@@ -21,8 +21,17 @@ namespace MTCG.Endpoints {
         public void Register() {
             var credentials = JsonConvert.DeserializeObject<Dictionary<string, string>>(_request.Content);
 
+            using UnitOfWork uow = new();
+
+
             if(credentials == null) {
                 _response.Send(HttpStatus.BadRequest);
+                return;
+            }
+
+            var duplicateUserName = uow.UserRepository.Get(user => user.UserName == credentials["Username"]);
+            if (duplicateUserName.Count > 0) {
+                _response.Send(HttpStatus.BadRequest, "Username already exists");
                 return;
             }
 
@@ -33,13 +42,10 @@ namespace MTCG.Endpoints {
                 TokenExpiration = DateTime.Now
             };
 
-            using UnitOfWork uow = new();
             uow.UserRepository.Insert(user);
 
-            if (uow.TrySave())
-                _response.Send(HttpStatus.OK);
-            else
-                _response.Send(HttpStatus.InternalServerError);
+            uow.Save();
+            _response.Send(HttpStatus.OK);
         }
     
     }

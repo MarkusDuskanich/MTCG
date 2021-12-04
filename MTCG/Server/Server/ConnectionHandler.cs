@@ -33,6 +33,10 @@ namespace MTCG.Server {
                 var targetMethod = GetTargetMethodOfRequest(targetClass);
                 try {
                     InvokeMethodOfRequest(targetMethod, targetClass);
+                }catch (KeyNotFoundException e) {
+                    Console.WriteLine(e);
+                    _response.Status = HttpStatus.BadRequest;
+                    _response.Send();
                 } catch (Exception e) {
                     Console.WriteLine(e);
                     _response.Status = HttpStatus.InternalServerError;

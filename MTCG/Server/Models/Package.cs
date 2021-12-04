@@ -6,10 +6,11 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace MTCG.Models {
-    [TEntity("packages")]
+    [DataSource("packages")]
     public class Package : ITEntity{
 
         public Guid Id { get; set; }
+        public int PackageNum { get; set; } = 0;
         public string Name { get; set; } = "";
         public int Damage { get; set; } = 0;
         public int Version { get; set; } = 1;

@@ -20,7 +20,8 @@ namespace MTCG.Http.Protocol {
 
         public void Send(HttpStatus status, string content = "", params string[] headers) {
             Status = status;
-            Content = content;
+            if(content.Length > 0)
+                Content = content;
             foreach (var header in headers) {
                 var keyValuePair = header.Split(": ");
                 Headers.Add(keyValuePair[0], keyValuePair[1]);

@@ -53,6 +53,7 @@ create table
 if not exists
 packages(
 id uuid not null,
+packagenum integer not null,
 name text not null,
 damage integer not null,
 version integer not null default 1);

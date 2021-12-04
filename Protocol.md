@@ -1,6 +1,8 @@
 to document features the application obsidian has been used
 in order to automate http requests insomnia is being used
 
+#set git repo to public before handin!
+
 ## timeline:
 3.10.2021 3h documentation of basic features, setup of repository
 4.10.2021 2h finished feature documentation, created unit test project, first class
@@ -13,3 +15,4 @@ in order to automate http requests insomnia is being used
 30.11.2021 2h reworked dao to generic version
 1.12.2021 4h finished dal rework
 1.12.2021 2h refactoring and attributes for models
+4.12.2021 3h added endpoints for sessions and packages + integration tests

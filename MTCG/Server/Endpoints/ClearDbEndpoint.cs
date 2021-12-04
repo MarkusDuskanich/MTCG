@@ -16,7 +16,12 @@ namespace MTCG.Endpoints {
 
         [HttpMethod(HttpMethod.DELETE)]
         public void ClearDB() {
-            //add authorization so only admin token can delete db
+            var dbAuthorization = "123455432100000";
+
+            if(dbAuthorization != _request.Headers["Authorization"]) {
+                _response.Send(HttpStatus.Unauthorized);
+                return;
+            }
 
             using UnitOfWork uow = new();
 

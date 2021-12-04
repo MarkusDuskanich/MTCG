@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace MTCG.Models.Attributes {
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Interface)]
-    public class TEntityAttribute : Attribute {
+    public class DataSourceAttribute : Attribute {
         public string TableName { get; private set; }
 
-        public TEntityAttribute(string tableName) {
+        public DataSourceAttribute(string tableName) {
             TableName = tableName;
         }
     }

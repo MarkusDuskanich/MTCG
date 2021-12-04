@@ -16,7 +16,6 @@ namespace MTCG.DAL.ORM {
             Connection = connection;
         }
 
-
         public void Delete<TEntity>(TEntity entityToDelete) where TEntity : class, ITEntity {
             string query = $"DELETE FROM {GetTableName(entityToDelete.GetType())} WHERE id = @id";
 
@@ -124,7 +123,7 @@ namespace MTCG.DAL.ORM {
             return result;
         }
         private static string GetTableName(Type entityType){
-            var res = entityType.GetCustomAttribute<TEntityAttribute>(false)?.TableName;
+            var res = entityType.GetCustomAttribute<DataSourceAttribute>(false)?.TableName;
             if (res == null)
                 throw new OrmException($"Could not get table name of {entityType.Name}");
             return res;

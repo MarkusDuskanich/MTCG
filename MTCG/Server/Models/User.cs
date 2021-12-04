@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace MTCG.Models {
-    [TEntity("users")]
+    [DataSource("users")]
     public class User : ITEntity {
         public Guid Id { get; set; }
         public string UserName { get; set; }
