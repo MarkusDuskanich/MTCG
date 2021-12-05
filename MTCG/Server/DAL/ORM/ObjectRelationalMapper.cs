@@ -17,14 +17,15 @@ namespace MTCG.DAL.ORM {
         }
 
         public void Delete<TEntity>(TEntity entityToDelete) where TEntity : class, ITEntity {
-            string query = $"DELETE FROM {GetTableName(entityToDelete.GetType())} WHERE id = @id";
+            string query = $"DELETE FROM {GetTableName(entityToDelete.GetType())} WHERE id = @id AND version = @version";
 
             using NpgsqlCommand command = new NpgsqlCommand(query, Connection);
             command.Parameters.AddWithValue("@id", entityToDelete.Id);
+            command.Parameters.AddWithValue("@version", entityToDelete.Version);
 
             int result = command.ExecuteNonQuery();
 
-            if (result < 0)
+            if (result <= 0)
                 throw new StaleObjectStateException($"delete in table {entityToDelete.GetType()}");
         }
 
@@ -59,7 +60,7 @@ namespace MTCG.DAL.ORM {
 
             int result = command.ExecuteNonQuery();
 
-            if (result == 0)
+            if (result <= 0)
                 throw new StaleObjectStateException($"update in table {entityToUpdate.GetType()}");
         }
 
@@ -87,7 +88,7 @@ namespace MTCG.DAL.ORM {
 
             int result = command.ExecuteNonQuery();
 
-            if (result < 0)
+            if (result <= 0)
                 throw new StaleObjectStateException($"insert in table {entityToInsert.GetType()}");
         }
 

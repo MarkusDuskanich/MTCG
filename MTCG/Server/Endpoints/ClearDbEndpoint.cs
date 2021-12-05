@@ -11,7 +11,7 @@ using System.Collections.Generic;
 
 namespace MTCG.Endpoints {
     [HttpEndpoint("/clearDB")]
-    class ClearDBEndpoint : Endpoint {
+    public class ClearDBEndpoint : Endpoint {
         public ClearDBEndpoint(HttpRequest request, HttpResponse response) : base(request, response) { }
 
         [HttpMethod(HttpMethod.DELETE)]

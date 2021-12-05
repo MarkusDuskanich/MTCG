@@ -16,3 +16,4 @@ in order to automate http requests insomnia is being used
 1.12.2021 4h finished dal rework
 1.12.2021 2h refactoring and attributes for models
 4.12.2021 3h added endpoints for sessions and packages + integration tests
+5.12.2021 4h added enpoints up to battle and integration test

@@ -1,4 +1,5 @@
 ﻿using MTCG.Models.Attributes;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +16,7 @@ namespace MTCG.Models {
         public int Damage { get; set; } = 0;
         public bool InDeck { get; set; } = false;
         public bool IsTradeOffer { get; set; } = false;
+        [JsonIgnore]
         public int Version { get; set; } = 1;
 
         //write a method to get element and type from name

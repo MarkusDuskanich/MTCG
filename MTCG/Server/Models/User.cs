@@ -1,4 +1,5 @@
 ﻿using MTCG.Models.Attributes;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -11,6 +12,7 @@ namespace MTCG.Models {
     public class User : ITEntity {
         public Guid Id { get; set; }
         public string UserName { get; set; }
+        public string Name { get; set; } = "";
         public string Password { get; set; }
         public string Bio { get; set; } = "";
         public string Image { get; set; } = "";
@@ -21,6 +23,7 @@ namespace MTCG.Models {
         public DateTime TokenExpiration { get; set; } = DateTime.Now;
         public DateTime LastLogin { get; set; } = DateTime.Now;
         public int LoginStreak { get; set; } = 0;
+        [JsonIgnore]
         public int Version { get; set; } = 1;
 
         public User() { }

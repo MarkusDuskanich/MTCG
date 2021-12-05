@@ -12,6 +12,7 @@ if not exists
 users(
 id uuid primary key,
 username text unique,
+name text null,
 password text not null,
 bio text default null,
 image text default null,
