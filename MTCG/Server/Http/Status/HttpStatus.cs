@@ -19,7 +19,9 @@ namespace MTCG.Http.Status {
         [Description("404 Not Found")]
         NotFound,
         [Description("500 Internal Server Error")]
-        InternalServerError
+        InternalServerError,
+        [Description("503 Service Unavailable")]
+        ServiceUnavailable
     }
 
     public class HttpStatusConverter {

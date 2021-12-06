@@ -29,6 +29,7 @@ namespace MTCG.Endpoints.Stats {
             var res = JsonConvert.SerializeObject(new Dictionary<string, string> {
                 {"wins", currentUser.Wins.ToString() },
                 {"losses", currentUser.Losses.ToString() },
+                {"games", currentUser.GamesPlayed.ToString() },
                 {"elo", elo.ToString() }
             });
 

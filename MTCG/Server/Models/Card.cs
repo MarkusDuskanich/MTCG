@@ -7,6 +7,25 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace MTCG.Models {
+
+    public enum CardElement {
+        Water,
+        Fire,
+        Normal
+    }
+
+    public enum CardType {
+        Goblin, 
+        Dragon, 
+        Wizard, 
+        Ork, 
+        Knight, 
+        Kraken, 
+        Elve,
+        Spell
+    }
+
+
     [DataSource("cards")]
     public class Card : ITEntity {
 
@@ -19,7 +38,25 @@ namespace MTCG.Models {
         [JsonIgnore]
         public int Version { get; set; } = 1;
 
-        //write a method to get element and type from name
+
+        public CardType GetCardType() {
+            var enumNames = Enum.GetNames(typeof(CardType));
+            foreach (var item in enumNames) {
+                if (Name.Contains(item))
+                    return Enum.Parse<CardType>(item);
+            }
+            throw new InvalidOperationException();
+        }
+
+        public CardElement GetCardElement() {
+            var enumNames = Enum.GetNames(typeof(CardElement));
+            foreach (var item in enumNames) {
+                if (Name.Contains(item))
+                    return Enum.Parse<CardElement>(item);
+            }
+            return CardElement.Normal;
+        }   
+
 
         public Card() { }
 

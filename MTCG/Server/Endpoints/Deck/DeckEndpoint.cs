@@ -49,7 +49,7 @@ namespace MTCG.Endpoints.Cards {
 
             var requestedDeck = JsonConvert.DeserializeObject<List<string>>(_request.Content);
             
-            if(requestedDeck.Count < 4) {
+            if(requestedDeck.Count != 4) {
                 _response.Send(HttpStatus.BadRequest);
                 return;
             }

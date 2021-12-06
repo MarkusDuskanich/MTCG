@@ -31,6 +31,7 @@ namespace MTCG.Endpoints.Stats {
                 board.Add(new() {
                     { "name", user.Name == "" ? user.UserName : user.Name },
                     { "k/d", user.Losses == 0 ? "inf" : (user.Wins / (double)user.Losses).ToString()},
+                    { "games", user.GamesPlayed.ToString()},
                     { "elo", (100 + 3 * user.Wins - 5 * user.Losses).ToString() }
                 });
             }

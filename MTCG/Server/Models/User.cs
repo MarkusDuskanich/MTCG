@@ -19,6 +19,7 @@ namespace MTCG.Models {
         public int Coins { get; set; } = 20;
         public int Wins { get; set; } = 0;
         public int Losses { get; set; } = 0;
+        public int GamesPlayed { get; set; } = 0;
         public string Token { get; set; } = "";
         public DateTime TokenExpiration { get; set; } = DateTime.Now;
         public DateTime LastLogin { get; set; } = DateTime.Now;
