@@ -1,4 +1,5 @@
 ﻿using MTCG.Models.Attributes;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +15,7 @@ namespace MTCG.Models {
         public bool MustBeSpell { get; set; } = false;
         public string Element { get; set; } = "";
         public int MinDamage { get; set; } = 0;
+        [JsonIgnore]
         public int Version { get; set; } = 1;
 
         public TradeOffer() {

@@ -15,7 +15,7 @@ namespace MTCG.DAL {
         private readonly MTCGContext _context;
         private static readonly Semaphore s_semaphore = new(1, 1);
 
-        public GenericRepository<User> _userRepository;
+        private GenericRepository<User> _userRepository;
         public GenericRepository<User> UserRepository {
             get {
                 if (_userRepository == null)
@@ -24,7 +24,7 @@ namespace MTCG.DAL {
             } 
         }
 
-        public GenericRepository<Card> _cardRepository;
+        private GenericRepository<Card> _cardRepository;
         public GenericRepository<Card> CardRepository {
             get {
                 if (_cardRepository == null)
@@ -33,7 +33,7 @@ namespace MTCG.DAL {
             }
         }
 
-        public GenericRepository<TradeOffer> _tradeOfferRepository;
+        private GenericRepository<TradeOffer> _tradeOfferRepository;
         public GenericRepository<TradeOffer> TradeOfferRepository {
             get {
                 if (_tradeOfferRepository == null)
@@ -42,7 +42,7 @@ namespace MTCG.DAL {
             }
         }
 
-        public GenericRepository<Package> _packageRepository;
+        private GenericRepository<Package> _packageRepository;
         public GenericRepository<Package> PackageRepository {
             get {
                 if (_packageRepository == null)

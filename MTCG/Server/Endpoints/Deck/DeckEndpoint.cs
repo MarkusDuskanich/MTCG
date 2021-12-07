@@ -59,7 +59,7 @@ namespace MTCG.Endpoints.Cards {
 
             //set new deck
             foreach (var id in requestedDeck) {
-                if(!userCards.Any(card => card.Id.ToString() == id)) {
+                if(!userCards.Any(card => card.Id.ToString() == id && card.IsTradeOffer == false)) {
                     _response.Send(HttpStatus.BadRequest);
                     return;
                 }

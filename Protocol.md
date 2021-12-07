@@ -18,3 +18,4 @@ in order to automate http requests insomnia is being used
 4.12.2021 3h added endpoints for sessions and packages + integration tests
 5.12.2021 4h added enpoints up to battle and integration test
 6.12.2021 4h implemented most of the battle logic
+7.12.2021 3h implemented trade endpoint and completed battle logic

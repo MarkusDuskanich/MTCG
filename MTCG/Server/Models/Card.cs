@@ -21,8 +21,9 @@ namespace MTCG.Models {
         Ork, 
         Knight, 
         Kraken, 
-        Elve,
-        Spell
+        Elf,
+        Spell,
+        Unknown
     }
 
 
@@ -45,7 +46,7 @@ namespace MTCG.Models {
                 if (Name.Contains(item))
                     return Enum.Parse<CardType>(item);
             }
-            throw new InvalidOperationException();
+            return CardType.Unknown;
         }
 
         public CardElement GetCardElement() {
@@ -56,7 +57,6 @@ namespace MTCG.Models {
             }
             return CardElement.Normal;
         }   
-
 
         public Card() { }
 

@@ -50,7 +50,7 @@ namespace MTCG.Endpoints.Battle {
                     battleStartAttempts = 0;
                 }
 
-                if (battleStartAttempts >= 800) {
+                if (battleStartAttempts >= 1000) {
                     user1 = null;
                     user2 = null;
                     battleStartAttempts = 0;
@@ -66,15 +66,11 @@ namespace MTCG.Endpoints.Battle {
 
         public BattleLog GetBattleLog(User user) {
             int fetchAttempts = 0;
-            while (fetchAttempts < 1000) {
+            while (fetchAttempts < 1100) {
                 lock (_logsLock) {
                     foreach (var item in _logs) {
-                        if (item.User == user) {
+                        if (item.User.Id == user.Id) {
                             _logs.Remove(item);
-
-                            if (_registeredUsers.Contains(user))
-                                return null;
-
                             return item;
                         }
                     }
