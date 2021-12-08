@@ -46,6 +46,12 @@ namespace MTCG.Endpoints.Trade {
             };
 
             var res = uow.CardRepository.GetById(Guid.Parse(newOffer["CardToTrade"]));
+
+            if (res.InDeck || res.IsTradeOffer) {
+                _response.Send(HttpStatus.Forbidden);
+                return;
+            }
+
             res.IsTradeOffer = true;
             uow.CardRepository.Update(res);
 

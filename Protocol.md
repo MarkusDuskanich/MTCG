@@ -1,7 +1,17 @@
-to document features the application obsidian has been used
-in order to automate http requests insomnia is being used
+to document features, the application obsidian has been used
+in order to automate http requests, insomnia has been used
 
-#set git repo to public before handin!
+##unit test strategy 
+low level classes, which do not have dependencies, are part of unit tests, higher level BL classes, who are interdependent, are covered by integration tests.6
+
+##design
+In order not to violate the open close principle, attributes and reflections have been used to implement http endpoints.
+For the dal the repository pattern has been used. Also, instead of DAO, a custom class which generates sql statements
+to map c# objects to postgresql tables, is used.To achieve this, like required by the assignment, no pre-build orm from another framework has been used.
+
+#set git repo to public before handin
+##link to repo
+https://github.com/MarkusDuskanich/MTCG
 
 ## timeline:
 3.10.2021 3h documentation of basic features, setup of repository
@@ -20,3 +30,4 @@ in order to automate http requests insomnia is being used
 6.12.2021 4h implemented most of the battle logic
 7.12.2021 3h implemented trade endpoint and completed battle logic
 8.12.2021 3h added Unit Tests and unique feature
+total 58h
