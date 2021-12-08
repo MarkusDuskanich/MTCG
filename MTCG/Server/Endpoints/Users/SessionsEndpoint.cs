@@ -1,5 +1,4 @@
-﻿
-using MTCG.DAL;
+﻿using MTCG.DAL;
 using MTCG.Http.Attributes;
 using MTCG.Http.Method;
 using MTCG.Http.Protocol;
@@ -19,7 +18,6 @@ namespace MTCG.Endpoints.Users {
 
         [HttpMethod(HttpMethod.POST)]
         public void Login() {
-            //unique feature: check last login, loginstreak etc.
 
             //user sends password and name
             var credentials = JsonConvert.DeserializeObject<Dictionary<string, string>>(_request.Content);
@@ -33,14 +31,36 @@ namespace MTCG.Endpoints.Users {
                 return;
             }
 
+            var user = res[0];
+
             //if entry match generate new token, update the user with token timeout
             var token = "Basic " + credentials["Username"] + "-mtcgToken";
             _response.Content = JsonConvert.SerializeObject(new Dictionary<string, string> { { "Token", token } });
+            user.Token = token;
+            user.TokenExpiration = DateTime.Now.AddHours(4);
 
-            res[0].Token = token;
-            res[0].TokenExpiration = DateTime.Now.AddHours(1);
+            //check if last login was yesterday
+            //if it was update the login-streak and give user reward
+            //if it was longer ago than that, reset login-streak
+            //query params to easier test feature
+            var getRewardIsSet = _request.QueryParameters.ContainsKey("getReward");
+            var breakStreakIsSet = _request.QueryParameters.ContainsKey("breakStreak");
 
-            uow.UserRepository.Update(res[0]);
+            if (user.LastLogin.Date == DateTime.Now.AddDays(-1).Date || getRewardIsSet) {
+                user.LoginStreak++;
+                //rewards
+                if (user.LoginStreak == 1) user.Coins++;
+                else if (user.LoginStreak == 2 || user.LoginStreak == 3) user.Coins += 2;
+                else user.Coins += 3;
+
+            }else if (user.LastLogin.Date < DateTime.Now.AddDays(-1).Date || breakStreakIsSet) {
+                user.LoginStreak = 0;
+            }
+
+            //update last login to now
+            user.LastLogin = DateTime.Now;  
+
+            uow.UserRepository.Update(user);
             uow.Save();
             _response.Send(HttpStatus.OK);
         }

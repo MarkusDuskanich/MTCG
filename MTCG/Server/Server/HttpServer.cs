@@ -25,6 +25,9 @@ namespace MTCG.Server {
 
             t_server = new Thread(Work);
             t_server.Start();
+            while (!IsRunning) {
+                Thread.Sleep(1);
+            }
         }
 
 
