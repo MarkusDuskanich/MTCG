@@ -1,6 +1,6 @@
 # Semester project SVEN 1 protocol
 to document features, the application obsidian has been used\
-in order to automate http requests, insomnia has been used\
+in order to automate http requests, insomnia has been used
 
 ## Unit test strategy: 
 low level classes, which do not have dependencies, are part of unit tests, higher level BL classes, who are interdependent, are covered by integration tests.
