@@ -13,17 +13,17 @@ Implementation of Battle feature:\
 The Battle class has a method to register users for battle\
 There is also a thread in the battle class which tries to select 2 users from a queue\
 If within a limited timeframe two users register, they are matched up and the Battle starts.\
-Once the battle is over a log object of the battle results can be fetched from the battle class for each user\
+Once the battle is over a log object of the battle results can be fetched from the battle class for each user
 
 ## Lessons Learned:
 How to use reflections, attributes and repository pattern,\
-with unit of work and transactions, how to use opportunistic concurrency for database synchronization\
+with unit of work and transactions, how to use opportunistic concurrency for database synchronization
 
 ## Unique feature:
 Daily login bonus:
 If a user logs in on consecutive days they are rewarded in the form of coins\
 on the first day 1 coin, on the second and third 2 coins and from the fourth onward 4 coins\
-if the users misses a day his streak is reset and starts at one with the next login\ 
+if the users misses a day his streak is reset and starts at one with the next login
 
 ## Timeline:
 3.10.2021 3h documentation of basic features, setup of repository\
@@ -43,7 +43,7 @@ if the users misses a day his streak is reset and starts at one with the next lo
 7.12.2021 3h implemented trade endpoint and completed battle logic\
 8.12.2021 3h added Unit Tests and unique feature\
 17.12.2021 0.5h added some more unit test\
-total 58.5h\
+total 58.5h
 
 ## Link to repo:
 https://github.com/MarkusDuskanich/MTCG
