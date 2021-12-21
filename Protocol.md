@@ -42,7 +42,7 @@ if the users misses a day his streak is reset and starts at one with the next lo
 6.12.2021 4h implemented most of the battle logic\
 7.12.2021 3h implemented trade endpoint and completed battle logic\
 8.12.2021 3h added Unit Tests and unique feature\
-17.12.2021 0.5h added some more unit test\
+17.12.2021 0.5h added some more unit tests\
 total 58.5h
 
 ## Link to repo:
